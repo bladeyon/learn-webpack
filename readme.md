@@ -39,3 +39,23 @@ module.exports = {
 ```
 
 现在就可以通过执行 `npm run build` 进行打包了
+
+## 资源管理
+
+### css
+
+安装 css loader: npm i style-loader css-loader -D
+
+在 webpack.config.js 配置 css 模块的加载器
+
+```js
+// webpack.config.js
+module: {
+  rules: [
+    {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader'] // 必须按这个顺序
+    }
+  ];
+}
+```
