@@ -46,7 +46,7 @@ module.exports = {
 
 安装 css loader: npm i style-loader css-loader -D
 
-在 webpack.config.js 配置 css 模块的加载器
+在 webpack.config.js 配置 css 文件的加载器
 
 ```js
 // webpack.config.js
@@ -55,6 +55,91 @@ module: {
     {
       test: /\.css$/,
       use: ['style-loader', 'css-loader'] // 必须按这个顺序
+    }
+  ];
+}
+```
+
+### 图片和字体
+
+在 webpack.config.js 配置对图片、字体文件的处理
+
+```js
+// webpack.config.js
+module: {
+  rules: [
+    // ...
+    {
+      test: /\.(png|jpg|svg)$/,
+      type: 'asset/resource'
+    },
+    {
+      test: /\.(woff|eot|ttf)$/,
+      type: 'asset/resource'
+    }
+  ];
+}
+```
+
+### 数据文件 xml、csv
+
+在 webpack.config.js 配置对应文件的加载器进行处理
+
+```js
+// webpack.config.js
+module: {
+  rules: [
+    {
+      test: /\.xml$/,
+      use: ['xml-loader']
+    },
+    {
+      test: /\.(csv|tsv)$/,
+      use: ['csv-loader']
+    }
+  ];
+}
+```
+
+### 类 json 文件
+
+```json
+// ./data.json
+{
+  "size": 5,
+  "records": [{}]
+}
+```
+
+```js
+// 导入上面文件
+import data from './data.json'; // 不会出错
+// 导入部分文件
+import { size } from './data.json'; // 报错
+```
+
+因为没有解析 json，所以会出错，可以通过配置解析处理方法
+
+```js
+// webpack.config.js
+const json5 = require('json5');
+const yaml = require('yaml');
+
+module: {
+  rules: [
+    {
+      test: /\.json5$/,
+      type: 'json',
+      parser: {
+        parse: json5.parse
+      }
+    },
+    {
+      test: /\.yaml$/,
+      type: 'json',
+      parser: {
+        parse: yaml.parse
+      }
     }
   ];
 }
